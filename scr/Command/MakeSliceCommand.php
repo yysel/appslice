@@ -44,17 +44,10 @@ class MakeSliceCommand extends Command
 
         echo iconv("UTF-8", "GBK", "正在创建构建策略...！\n\n");
         sleep(1);
-//        echo iconv("UTF-8", "GBK", "正在构建控制器...！\n\n");
-//        sleep(1);
-//        echo iconv("UTF-8", "GBK", "正在构建视图层...！\n\n");
-//        sleep(1);
-//        echo iconv("UTF-8", "GBK", "正在构建路由控制...！\n\n");
-//        sleep(1);
-//        echo iconv("UTF-8", "GBK", "正在构建中间件...！\n\n");
-//        sleep(1);
         echo iconv("UTF-8", "GBK", "正在创建应用 {$name} ...！\n");
         $this->output->progressStart(5);
-       while($ob->buildeApp()){
+        while ($ob->buildeApp()) {
+            usleep(500000);
             $this->output->progressAdvance();
         }
         $this->output->progressFinish();

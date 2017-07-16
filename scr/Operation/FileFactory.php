@@ -16,6 +16,7 @@ class FileFactory
     protected $core_path;
     protected $app_path;
     protected $app_name;
+    protected $space;
     protected $file_contents;
     protected $count = 0;
 
@@ -25,6 +26,8 @@ class FileFactory
         $this->app_name = ucfirst(strtolower($app_name));
         $this->core_name = ucfirst(strtolower(config('slice.core.name', 'Core')));
         $this->core_base_path = config('slice.core.path', base_path());
+        $this->space = ucfirst(strtolower(strtr($this->core_base_path, [base_path() => '', '/' => '', '\\' => ''])));
+        if($this->space)$this->space=$this->space.'\\';
         $this->core_path = $this->core_base_path . '/' . $this->core_name;
         $this->file_contents = new FillContent();
     }
@@ -68,7 +71,7 @@ class FileFactory
         $app_dir = $this->getAppDirPath();
         $controller = $this->makeFileIfNotExsit($app_dir . '/Controllers/DemoController.php');
         $content = $this->file_contents::DemoController;
-        $content = strtr($content, ['{Core}' => $this->core_name, '{App}' => $this->app_name]);
+        $content = strtr($content, ['{space}' => $this->space, '{Core}' => $this->core_name, '{App}' => $this->app_name]);
         return fwrite($controller, $content);
     }
 
@@ -76,7 +79,8 @@ class FileFactory
     {
         $app_dir = $this->getAppDirPath();
         $view = $this->makeFileIfNotExsit($app_dir . '/Views/demo.blade.php');
-        $content = "欢迎来到应用{$this->app_name}的首页";
+        $content = $this->file_contents::DemoView;
+        $content = strtr($content, [ '{title}' => $this->app_name.'的首页', '{App}' => $this->app_name]);
         return fwrite($view, $content);
     }
 
