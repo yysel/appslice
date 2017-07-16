@@ -1,45 +1,45 @@
-#App-Slice <应用分片组件> 
-为`Laravel`项目量身开发项目分片组件，可以让您以不同应用来更加灵活的组织项目结构
-##1、安装： 
-```composer
-    在命令行执行：composer require kitty/appslice
-```
-##2、提取配置文件：
-```composer
-    在命令行执行：php artisan vendor:publish
-```
-##3、修改默认配置（可选）
-   1）打开项目根目录下的config目录下的slice.php。
-   2）修改core配置项下的name与path,其中name是项目组目录名，你未来所创建的所有目录都将放在这里，默认是Core;path是项目组所在路径默认放在根目录的app下。
-   3）注意如果修改了默认的路径，并且不再是/app的时候，你需要修改composer.json,如下
-   ```json
-    "autoload": {
-        "classmap": [
-            "database"
-        ],
-        "psr-4": {
-            "App\\": "app/",
-            "Core\\": "Core/"
-        }
-    }
-```
-##增加视图目录选项：修改/config/view.php的'paths'数组，添加一行，如下；
-```php
-      'paths' => [
-            resource_path('views'),
-            base_path()
-        ],
-```
-##4、添加服务提供者至``/config/app.php``文件下的'providers'数组内如下：
-```php
-'providers' => [
-         Kitty\AppSlice\AppSliceProvider::class,
- ]
-```
-##5、创建应用
-    1) 命令行运行：php artisan make:app
-    2) 按提示输入应用名称
-    3）等待几秒钟应用就被创建完成
-##6、使用说明
-假如我们采用默认配置，创建一个叫home的应用，slice就会在/app/Core/下创建一个为Home的应用，slice已经为你默认创建的Controllers和Views，他们是存放控制器和视图文件的，并且slice默认创建了一个demo的控制器和视图。在Home/下还已经建立好了route.php用来书写路由，他们被分配在home分组下。
-你可以使用app_view()方法来像view()一样渲染视图,只不过他会动态查找本应用下的视图文件，而不是resources目录下
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></a></p>
+
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
+
+## About Laravel
+
+> **Note:** This repository contains the core code of the Laravel framework. If you want to build an application using Laravel 5, visit the main [Laravel repository](https://github.com/laravel/laravel).
+
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+
+Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+
+## Learning Laravel
+
+Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+
+If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials covering a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
