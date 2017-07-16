@@ -22,9 +22,9 @@
     在命令行执行：php artisan vendor:publish
 ```
 ## 5、修改默认配置（可选）
-   1）打开项目根目录下的config目录下的slice.php。
-   2）修改core配置项下的name与path,其中name是项目组目录名，你未来所创建的所有目录都将放在这里，默认是Core;path是项目组所在路径默认放在根目录的app下。
-   3）注意如果修改了默认的路径，并且不再是/app的时候，你需要修改composer.json,如下
+   * 1）打开项目根目录下的config目录下的slice.php。
+   * 2）修改core配置项下的name与path,其中name是项目组目录名，你未来所创建的所有目录都将放在这里，默认是Core;path是项目组所在路径默认放在根目录的app下。
+   * 3）注意如果修改了默认的路径，并且不再是/app的时候，你需要修改composer.json,如下
    ```json
     "autoload": {
         "classmap": [
