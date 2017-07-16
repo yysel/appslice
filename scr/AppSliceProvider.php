@@ -22,7 +22,7 @@ class AppSliceProvider extends ServiceProvider
     {
         require(base_path($this->package_path . '/scr/functions/functions.php'));
         $this->core_name = ucfirst(strtolower(config('slice.core.name', 'Core')));
-        $this->core_path = config('slice.core.path', base_path());
+        $this->core_path = config('slice.core.path', base_path('app'));
         $this->space = ucfirst(strtolower(strtr($this->core_path, [base_path() => '', '/' => '', '\\' => ''])));
         $this->mapAppRoutes();
         $this->publishes([

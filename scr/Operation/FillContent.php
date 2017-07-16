@@ -94,7 +94,7 @@ CON;
 
             <div class="content">
                 <div class="title m-b-md">
-                    The Home page of {App}
+                    Home page of {App}
                 </div>
 
                 <div class="links">

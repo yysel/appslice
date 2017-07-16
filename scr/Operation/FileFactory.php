@@ -25,7 +25,7 @@ class FileFactory
     {
         $this->app_name = ucfirst(strtolower($app_name));
         $this->core_name = ucfirst(strtolower(config('slice.core.name', 'Core')));
-        $this->core_base_path = config('slice.core.path', base_path());
+        $this->core_base_path = config('slice.core.path', base_path('app'));
         $this->space = ucfirst(strtolower(strtr($this->core_base_path, [base_path() => '', '/' => '', '\\' => ''])));
         if($this->space)$this->space=$this->space.'\\';
         $this->core_path = $this->core_base_path . '/' . $this->core_name;
