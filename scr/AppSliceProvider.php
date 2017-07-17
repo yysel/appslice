@@ -49,9 +49,14 @@ class AppSliceProvider extends ServiceProvider
         if ($dir_paths = (read_dir($this->core_path . '/' . $this->core_name))) {
             foreach ($dir_paths as $dir_name => $dir_path) {
                 if (file_exists($route_path = $dir_path . '/route.php')) {
-                    Route::prefix(strtolower($dir_name))
-                        ->namespace($this->space . "\\{$this->core_name}\\$dir_name\\Controllers")
-                        ->group($route_path);
+                    $app_name = strtolower($dir_name);
+                    $prefix = config('slice.app.' . $app_name . '.name', $app_name);
+                    $middlewares_all = config('slice.app.all.middleware', []);
+                    $middlewares_app = config('slice.app.' . $app_name . '.middleware', []);
+                    $middlewares = array_merge($middlewares_all, $middlewares_app);
+                    $route = Route::prefix($prefix);
+                    if ($middlewares) $route = $route->middleware($middlewares);
+                    $route->namespace($this->space . "\\{$this->core_name}\\$dir_name\\Controllers")->group($route_path);
                 }
             }
         }
