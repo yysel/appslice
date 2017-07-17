@@ -45,7 +45,7 @@ class MakeSliceCommand extends Command
         echo iconv("UTF-8", "GBK", "正在创建构建策略...！\n\n");
         sleep(1);
         echo iconv("UTF-8", "GBK", "正在创建应用 {$name} ...！\n");
-        $this->output->progressStart(5);
+        $this->output->progressStart(6);
         while ($ob->buildeApp()) {
             usleep(500000);
             $this->output->progressAdvance();
@@ -53,6 +53,6 @@ class MakeSliceCommand extends Command
         $this->output->progressFinish();
         echo iconv("UTF-8", "GBK", "正在初始化配置...！\n\n");
         sleep(1);
-        $this->error(iconv("UTF-8", "GBK", "应用构建完成 Y(^_^)Y "));
+        $this->info(iconv("UTF-8", "GBK", "应用构建完成 Y(^_^)Y "));
     }
 }

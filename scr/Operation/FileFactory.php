@@ -50,6 +50,13 @@ class FileFactory
         return $this->makeDirIfNotExist($app_dir . '/Controllers');
     }
 
+    public function makeMiddlewareDir()
+    {
+        $app_dir = $this->getAppDirPath();
+
+        return $this->makeDirIfNotExist($app_dir . '/Middleware');
+    }
+
     public function makeViewDir()
     {
         $app_dir = $this->getAppDirPath();
@@ -111,6 +118,10 @@ class FileFactory
                 return ++$this->count;
                 break;
             case 4:
+                $this->makeMiddlewareDir();
+                return ++$this->count;
+                break;
+            case 5:
                 $this->makeRouteFile();
                 return $this->count = 0;
                 break;
