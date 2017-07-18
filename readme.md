@@ -35,11 +35,13 @@
             "Core\\": "Core/"
         }
     }
-```
+   ```
 ## 6、创建应用
-    1) 命令行运行：php artisan make:app
-    2) 按提示输入应用名称
-    3）等待几秒钟应用就被创建完成
+```php
+1) 命令行运行：php artisan make:app
+2) 按提示输入应用名称
+3）等待几秒钟应用就被创建完成
+```
 ## 7、使用说明
 假如我们采用默认配置，创建一个叫home的应用，slice就会在/app/Core/下创建一个为Home的应用，slice已经为你默认创建的Controllers和Views，他们是存放控制器和视图文件的，并且slice默认创建了一个demo的控制器和视图。在Home/下还已经建立好了route.php用来书写路由，他们被分配在home分组下。
 你可以使用app_view()方法来像view()一样渲染视图,只不过他会动态查找本应用下的视图文件，而不是resources目录下

@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Kitty\AppSlice\Command\GetVersionCommand;
 use Kitty\AppSlice\Command\MakeSliceCommand;
 use Illuminate\Support\Facades\Route;
+use Kitty\AppSlice\Operation\FileFactory;
 
 class AppSliceProvider extends ServiceProvider
 {
@@ -22,13 +23,22 @@ class AppSliceProvider extends ServiceProvider
     public function boot()
     {
         require(base_path($this->package_path . '/src/functions/functions.php'));
-        $this->core_name = ucfirst(strtolower(config('slice.core.name', 'Core')));
-        $this->core_path = config('slice.core.path', base_path('app'));
-        $this->space = ucfirst(strtolower(strtr($this->core_path, [base_path() => '', '/' => '', '\\' => ''])));
+        $fileFactory = new FileFactory();
+        $this->core_name = $fileFactory->getCoreName();
+        $this->core_path = $fileFactory->getCorePath();
+        $this->space = $fileFactory->getSpace();
         $this->mapAppRoutes();
         $this->publishes([
             __DIR__ . '/Config/slice.php' => config_path('slice.php'),
         ]);
+        $view_config = config('view.paths');
+        $view_config[] = base_path();
+        if ($dir_paths = (read_dir($this->core_path . '/' . $this->core_name))) {
+            foreach ($dir_paths as $dir_name => $dir_path) {
+                $view_config[] = $dir_path . '/Views';
+            }
+        }
+        config(['view.paths' => $view_config]);
     }
 
     /**
@@ -52,6 +62,7 @@ class AppSliceProvider extends ServiceProvider
     protected function mapAppRoutes()
     {
         if ($dir_paths = (read_dir($this->core_path . '/' . $this->core_name))) {
+            $core_name = ucfirst(strtolower($this->core_name));
             foreach ($dir_paths as $dir_name => $dir_path) {
                 if (file_exists($route_path = $dir_path . '/route.php')) {
                     $app_name = strtolower($dir_name);
@@ -61,7 +72,7 @@ class AppSliceProvider extends ServiceProvider
                     $middlewares = array_merge($middlewares_all, $middlewares_app);
                     $route = Route::prefix($prefix);
                     if ($middlewares) $route = $route->middleware($middlewares);
-                    $route->namespace($this->space . "\\{$this->core_name}\\$dir_name\\Controllers")->group($route_path);
+                    $route->namespace($this->space . "\\$core_name\\$dir_name\\Controllers")->group($route_path);
                 }
             }
         }

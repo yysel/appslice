@@ -19,7 +19,7 @@ class MakeSliceCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Make an App!';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,7 @@ class MakeSliceCommand extends Command
         echo iconv("UTF-8", "GBK", "正在创建构建策略...！\n\n");
         sleep(1);
         echo iconv("UTF-8", "GBK", "正在创建应用 {$name} ...！\n");
-        $this->output->progressStart(6);
+        $this->output->progressStart(7);
         while ($ob->buildeApp()) {
             usleep(500000);
             $this->output->progressAdvance();

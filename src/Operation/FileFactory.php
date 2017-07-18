@@ -24,10 +24,10 @@ class FileFactory
     public function __construct($app_name = '')
     {
         $this->app_name = ucfirst(strtolower($app_name));
-        $this->core_name = ucfirst(strtolower(config('slice.core.name', 'Core')));
-        $this->core_base_path = config('slice.core.path', base_path('app'));
+        $this->core_name = config('slice.core.name', 'core');
+        $this->core_base_path = config('slice.core.path', base_path());
         $this->space = ucfirst(strtolower(strtr($this->core_base_path, [base_path() => '', '/' => '', '\\' => ''])));
-        if($this->space)$this->space=$this->space.'\\';
+        if ($this->space) $this->space = $this->space . '\\';
         $this->core_path = $this->core_base_path . '/' . $this->core_name;
         $this->file_contents = new FillContent();
     }
@@ -36,6 +36,21 @@ class FileFactory
     {
         if (!is_dir($path)) return mkdir($path, $model, $r);
         return false;
+    }
+
+    public function getCoreName()
+    {
+        return $this->core_name;
+    }
+
+    public function getCorePath()
+    {
+        return $this->core_base_path;
+    }
+
+    public function getSpace()
+    {
+        return $this->space;
     }
 
     protected function getAppDirPath()
@@ -87,7 +102,7 @@ class FileFactory
         $app_dir = $this->getAppDirPath();
         $view = $this->makeFileIfNotExsit($app_dir . '/Views/demo.blade.php');
         $content = $this->file_contents::DemoView;
-        $content = strtr($content, [ '{title}' => $this->app_name.'的首页', '{App}' => $this->app_name]);
+        $content = strtr($content, ['{title}' => $this->app_name . '的首页', '{App}' => $this->app_name]);
         return fwrite($view, $content);
     }
 
@@ -96,6 +111,14 @@ class FileFactory
 //        $mode = file_exists($name) ? 'a' : 'w';
 
         return $file = fopen($name, $mode = 'w');
+    }
+
+    public function updateComposer()
+    {
+        $composer = (json_decode(file_get_contents(base_path('composer.json')), true));
+        $composer['autoload']['psr-4'][ucfirst(strtolower($this->core_name)).'\\'] = $this->core_name.'/';
+        $composer = json_encode($composer, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents(base_path('composer.json'), $composer);
     }
 
     public function buildeApp()
@@ -123,6 +146,10 @@ class FileFactory
                 break;
             case 5:
                 $this->makeRouteFile();
+                return ++$this->count;
+                break;
+            case 6:
+                $this->updateComposer();
                 return $this->count = 0;
                 break;
         }
