@@ -3,6 +3,7 @@
 namespace Kitty\AppSlice;
 
 use Illuminate\Support\ServiceProvider;
+use Kitty\AppSlice\Command\GetVersionCommand;
 use Kitty\AppSlice\Command\MakeSliceCommand;
 use Illuminate\Support\Facades\Route;
 
@@ -37,10 +38,14 @@ class AppSliceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('command.app.slice', function () {
+        $this->app->singleton('command.app.slice.make', function () {
             return new MakeSliceCommand();
         });
-        $this->commands('command.app.slice');
+        $this->app->singleton('command.app.slice.version', function () {
+            return new GetVersionCommand();
+        });
+        $this->commands('command.app.slice.make');
+        $this->commands('command.app.slice.version');
 
     }
 
