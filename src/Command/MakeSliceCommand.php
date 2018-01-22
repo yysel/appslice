@@ -3,6 +3,7 @@
 namespace Kitty\AppSlice\Command;
 
 use Illuminate\Console\Command;
+use Kitty\AppSlice\HelperClass\HelperClass;
 use Kitty\AppSlice\Operation\FileFactory;
 
 class MakeSliceCommand extends Command
@@ -38,21 +39,25 @@ class MakeSliceCommand extends Command
      */
     public function handle()
     {
+        $str=file_get_contents(config_path('view.php'));
+        $helper=new HelperClass();
+        $location=$helper->strEndPlace($str,"'paths' => [\n");
+        $res=$helper->insertToStr($str,$location,"\t\taaa\n");
 
-        $name = $this->ask(iconv("UTF-8", "GBK", "请输入要创建的应用名称"));
+        $name = $this->ask($helper->out( "请输入要创建的应用名称"));
         $ob = new FileFactory($name);
 
-        echo iconv("UTF-8", "GBK", "正在创建构建策略...！\n\n");
+        $this->comment( $helper->out("正在创建构建策略...！"));
         sleep(1);
-        echo iconv("UTF-8", "GBK", "正在创建应用 {$name} ...！\n");
-        $this->output->progressStart(7);
+        $this->comment( $helper->out("正在创建应用 {$name} ...！"));
+        $this->output->progressStart(8);
         while ($ob->buildeApp()) {
             usleep(500000);
             $this->output->progressAdvance();
         }
         $this->output->progressFinish();
-        echo iconv("UTF-8", "GBK", "正在初始化配置...！\n\n");
+        $this-> info($helper->out("正在初始化配置...！") );
         sleep(1);
-        $this->info(iconv("UTF-8", "GBK", "应用构建完成 Y(^_^)Y "));
+        $this->info($helper->out("应用构建完成！"));
     }
 }

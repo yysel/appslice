@@ -18,7 +18,7 @@ class DemoController extends Controller
 {
     public function demo()
     {
-        return app_view('demo');
+        return view('demo');
     }
 }
 CON;

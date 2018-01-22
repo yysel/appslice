@@ -1,8 +1,8 @@
 <?php
 
-function app_location()
+function app_location($app='Core')
 {
-    return __DIR__ . '/../Core/';
+    return __DIR__ . '/../'.$app.'/';
 
 }
 
@@ -14,10 +14,10 @@ function view_base_path()
 function app_view($view, $data = [], $mergeData = [])
 {
     $DirName = basename(dirname(dirname(debug_backtrace()[0]['file'])));
-    $core_path = config('slice.core.path', base_path());
+//    $core_path = config('slice.core.path', base_path());
     $core_name = config('slice.core.name', 'Core');
-    $core_base_name = (strtolower(strtr($core_path, [base_path() => '', '/' => '', '\\' => ''])));
-    return view($core_base_name . '.' . $core_name .'.'. $DirName  . '.Views.' . $view, $data, $mergeData);
+//    $core_base_name = (strtolower(strtr($core_path, [base_path() => '', '/' => '', '\\' => ''])));
+    return view( $core_name .'.'. $DirName  . '.Views.' . $view, $data, $mergeData);
 }
 
 function read_dir($path)

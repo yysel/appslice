@@ -9,6 +9,8 @@
 namespace Kitty\AppSlice\Operation;
 
 
+use Kitty\AppSlice\HelperClass\HelperClass;
+
 class FileFactory
 {
     protected $core_base_path;
@@ -23,6 +25,7 @@ class FileFactory
 
     public function __construct($app_name = '')
     {
+        $this->oldumask=umask(0);
         $this->app_name = ucfirst(strtolower($app_name));
         $this->core_name = config('slice.core.name', 'core');
         $this->core_base_path = config('slice.core.path', base_path());
@@ -32,9 +35,11 @@ class FileFactory
         $this->file_contents = new FillContent();
     }
 
-    public function makeDirIfNotExist($path, $model = '0777', $r = true)
+    public function makeDirIfNotExist($path, $model = 0755, $r = true)
     {
-        if (!is_dir($path)) return mkdir($path, $model, $r);
+        if (!is_dir($path)) {
+           return mkdir($path, $model, $r);
+        }
         return false;
     }
 
@@ -121,6 +126,16 @@ class FileFactory
         file_put_contents(base_path('composer.json'), $composer);
     }
 
+    public function updateViewFile()
+    {
+        $view_path=config_path('view.php');
+        $str=file_get_contents($view_path);
+        $helper=new HelperClass();
+        $location=$helper->strEndPlace($str,"'paths' => [\n");
+        $res=$helper->insertToStr($str,$location,"\t\tbase_path('{$this->core_name}/{$this->app_name}/Views'),\n");
+        file_put_contents($view_path, $res);
+    }
+
     public function buildeApp()
     {
         switch ($this->count) {
@@ -150,8 +165,16 @@ class FileFactory
                 break;
             case 6:
                 $this->updateComposer();
+                return ++$this->count;
+            case 7:
+                $this->updateViewFile();
                 return $this->count = 0;
                 break;
         }
+    }
+
+    public function __destruct()
+    {
+        umask($this->oldumask);
     }
 }
