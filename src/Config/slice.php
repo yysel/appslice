@@ -9,7 +9,7 @@ return [
 
     'app' => [
         'all' => [
-            'middleware' => ['switch'],
+            'middleware' => ['web'],
         ],
         'home' => [
             'middleware' => [],
