@@ -15,9 +15,13 @@ function app_view($view, $data = [], $mergeData = [])
 {
     $DirName = basename(dirname(dirname(debug_backtrace()[0]['file'])));
 //    $core_path = config('slice.core.path', base_path());
-    $core_name = config('slice.core.name', 'Core');
+//    $core_name = config('slice.core.name', 'core');
 //    $core_base_name = (strtolower(strtr($core_path, [base_path() => '', '/' => '', '\\' => ''])));
-    return view( $core_name .'.'. $DirName  . '.Views.' . $view, $data, $mergeData);
+    return view( $DirName  . '.Views.' . $view, $data, $mergeData);
+}
+
+function core_path(){
+    return config('slice.core.path',base_path()).'/'.config('slice.core.name', 'core');
 }
 
 function read_dir($path)

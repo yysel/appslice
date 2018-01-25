@@ -13,7 +13,7 @@ class MakeSliceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:app {name=Demo} {--namespace}';
+    protected $signature = 'make:app {name?} {--namespace}';
 
     /**
      * The console command description.
@@ -43,21 +43,18 @@ class MakeSliceCommand extends Command
         $helper=new HelperClass();
         $location=$helper->strEndPlace($str,"'paths' => [\n");
         $res=$helper->insertToStr($str,$location,"\t\taaa\n");
-
-        $name = $this->ask($helper->out( "请输入要创建的应用名称"));
+        $name=$this->argument('name');
+        if(!$name) $name = $this->ask($helper->out( "请输入要创建的应用名称"));
         $ob = new FileFactory($name);
-
-        $this->comment( $helper->out("正在创建构建策略...！"));
-        sleep(1);
         $this->comment( $helper->out("正在创建应用 {$name} ...！"));
         $this->output->progressStart(8);
         while ($ob->buildeApp()) {
-            usleep(500000);
+            usleep(100000);
             $this->output->progressAdvance();
         }
         $this->output->progressFinish();
-        $this-> info($helper->out("正在初始化配置...！") );
-        sleep(1);
+        exec('composer dumpautoload');
         $this->info($helper->out("应用构建完成！"));
+        exit;
     }
 }

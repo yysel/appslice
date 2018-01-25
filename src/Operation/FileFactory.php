@@ -25,7 +25,7 @@ class FileFactory
 
     public function __construct($app_name = '')
     {
-        $this->oldumask=umask(0);
+        $this->oldumask = umask(0);
         $this->app_name = ucfirst(strtolower($app_name));
         $this->core_name = config('slice.core.name', 'core');
         $this->core_base_path = config('slice.core.path', base_path());
@@ -38,7 +38,7 @@ class FileFactory
     public function makeDirIfNotExist($path, $model = 0755, $r = true)
     {
         if (!is_dir($path)) {
-           return mkdir($path, $model, $r);
+            return mkdir($path, $model, $r);
         }
         return false;
     }
@@ -121,19 +121,23 @@ class FileFactory
     public function updateComposer()
     {
         $composer = (json_decode(file_get_contents(base_path('composer.json')), true));
-        $composer['autoload']['psr-4'][ucfirst(strtolower($this->core_name)).'\\'] = $this->core_name.'/';
+        $composer['autoload']['psr-4'][ucfirst(strtolower($this->core_name)) . '\\'] = $this->core_name . '/';
         $composer = json_encode($composer, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composer);
     }
 
     public function updateViewFile()
     {
-        $view_path=config_path('view.php');
-        $str=file_get_contents($view_path);
-        $helper=new HelperClass();
-        $location=$helper->strEndPlace($str,"'paths' => [\n");
-        $res=$helper->insertToStr($str,$location,"\t\tbase_path('{$this->core_name}/{$this->app_name}/Views'),\n");
-        file_put_contents($view_path, $res);
+        $view_path = config_path('view.php');
+        $str = $res = file_get_contents($view_path);
+        $helper = new HelperClass();
+        $location = $helper->strEndPlace($str, "'paths' => [\n");
+        $core = strpos($str, "base_path('core')");
+        if (!$core) $res = $helper->insertToStr($str, $location, "\t\tbase_path('core'),\n");
+        $app_name_str = "base_path('{$this->core_name}/{$this->app_name}/Views')";
+        $app_name = strpos($str, $app_name_str);
+        if (!$app_name) $res = $helper->insertToStr($res, $location, "\t\t{$app_name_str},\n");
+        if ($str != $res) file_put_contents($view_path, $res);
     }
 
     public function buildeApp()
@@ -168,7 +172,7 @@ class FileFactory
                 return ++$this->count;
             case 7:
                 $this->updateViewFile();
-                return $this->count = 0;
+                return $this->count = -1;
                 break;
         }
     }
