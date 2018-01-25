@@ -70,9 +70,13 @@ class AppSliceProvider extends ServiceProvider
                     $middlewares_all = config('slice.app.all.middleware', []);
                     $middlewares_app = config('slice.app.' . $app_name . '.middleware', []);
                     $middlewares = array_merge($middlewares_all, $middlewares_app);
-                    $route = Route::prefix($prefix);
-                    if ($middlewares) $route = $route->middleware($middlewares);
-                    $route->namespace($this->space . "\\$core_name\\$dir_name\\Controllers")->group($route_path);
+                    Route::group([
+                        'middleware' => $middlewares,
+                        'namespace' => $this->space . "\\$core_name\\$dir_name\\Controllers",
+                        'prefix' => $prefix,
+                    ], function ($router) use($route_path) {
+                        require $route_path;
+                    });
                 }
             }
         }
