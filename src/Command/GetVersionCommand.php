@@ -12,7 +12,7 @@ class GetVersionCommand extends Command
      * @var string
      */
     protected $signature = 'slice';
-    protected $version = "\nApp-Slice  version 1.3.2  2018-01-25 @烟雨十二楼 \n\n";
+    protected $version = "\nApp-Slice  version 1.3.4  2018-05-23 @烟雨十二楼 \n\n";
 
     /**
      * The console command description.

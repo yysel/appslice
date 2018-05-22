@@ -3,7 +3,7 @@
 namespace Kitty\AppSlice\Command;
 
 use Illuminate\Console\Command;
-use Kitty\AppSlice\HelperClass\HelperClass;
+use Kitty\AppSlice\Operation\HelperClass;
 use Kitty\AppSlice\Operation\FileFactory;
 
 class MakeSliceCommand extends Command
