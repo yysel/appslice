@@ -1,6 +1,6 @@
 <?php
 
-namespace Kitty\AppSlice\HelperClass;
+namespace Kitty\AppSlice\Operation;
 
 class HelperClass
 {

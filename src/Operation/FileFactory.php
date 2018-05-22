@@ -9,7 +9,7 @@
 namespace Kitty\AppSlice\Operation;
 
 
-use Kitty\AppSlice\HelperClass\HelperClass;
+use Kitty\AppSlice\Operation\HelperClass;
 
 class FileFactory
 {
