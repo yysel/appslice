@@ -9,7 +9,7 @@ class  FillContent
     const DemoController = <<<CON
 <?php
 
-namespace {space}{Core}\{App}\Controllers;
+namespace {namespace};
 
 
 use App\Http\Controllers\Controller;
@@ -21,7 +21,137 @@ class DemoController extends Controller
         return app_view('demo');
     }
 }
+
+
 CON;
+
+    const ResourceController = <<<CON
+<?php
+
+namespace {namespace};
+
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class {name}Controller extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  \$request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request \$request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show()
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit()
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  \$request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request \$request)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy( )
+    {
+        //
+    }
+    
+}
+
+
+CON;
+
+    const Controller = <<<CON
+<?php
+
+namespace {namespace};
+
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class {name}Controller extends Controller
+{
+
+    public function index()
+    {
+        // Your code
+    }
+    
+}
+
+
+CON;
+
+    const Model = <<<CON
+<?php
+
+namespace {namespace};
+
+
+use Illuminate\Database\Eloquent\Model;
+
+class {name} extends Model
+{
+    protected \$table = '{name}s';
+    
+    //
+}
+
+CON;
+
     const DemoView = <<<CON
 <!doctype html>
 <html lang="{{ config('app.locale') }}">

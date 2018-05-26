@@ -4,9 +4,12 @@ namespace Kitty\AppSlice;
 
 use Illuminate\Support\ServiceProvider;
 use Kitty\AppSlice\Command\GetVersionCommand;
+use Kitty\AppSlice\Command\MakeControllerCommand;
+use Kitty\AppSlice\Command\MakeModelCommand;
 use Kitty\AppSlice\Command\MakeSliceCommand;
 use Illuminate\Support\Facades\Route;
 use Kitty\AppSlice\Operation\FileFactory;
+use Kitty\AppSlice\Operation\HelperClass;
 
 class AppSliceProvider extends ServiceProvider
 {
@@ -54,8 +57,18 @@ class AppSliceProvider extends ServiceProvider
         $this->app->singleton('command.app.slice.version', function () {
             return new GetVersionCommand();
         });
+
+        $this->app->singleton('command.app.slice.make.c', function () {
+            return new MakeControllerCommand((new HelperClass()), (new FileFactory()));
+        });
+
+        $this->app->singleton('command.app.slice.make.m', function () {
+            return new MakeModelCommand((new HelperClass()), (new FileFactory()));
+        });
         $this->commands('command.app.slice.make');
         $this->commands('command.app.slice.version');
+        $this->commands('command.app.slice.make.c');
+        $this->commands('command.app.slice.make.m');
 
     }
 
@@ -74,7 +87,7 @@ class AppSliceProvider extends ServiceProvider
                         'middleware' => $middlewares,
                         'namespace' => $this->space . "\\$core_name\\$dir_name\\Controllers",
                         'prefix' => $prefix,
-                    ], function ($router) use($route_path) {
+                    ], function ($router) use ($route_path) {
                         require $route_path;
                     });
                 }

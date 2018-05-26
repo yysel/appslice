@@ -47,8 +47,8 @@ class MakeSliceCommand extends Command
         if(!$name) $name = $this->ask($helper->out( "请输入要创建的应用名称"));
         $ob = new FileFactory($name);
         $this->comment( $helper->out("正在创建应用 {$name} ...！"));
-        $this->output->progressStart(8);
-        while ($ob->buildeApp()) {
+        $this->output->progressStart(9);
+        while ($ob->buildApp()) {
             usleep(100000);
             $this->output->progressAdvance();
         }

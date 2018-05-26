@@ -33,6 +33,7 @@ class FileFactory
         if ($this->space) $this->space = $this->space . '\\';
         $this->core_path = $this->core_base_path . '/' . $this->core_name;
         $this->file_contents = new FillContent();
+        $this->helper = new  HelperClass();
     }
 
     public function makeDirIfNotExist($path, $model = 0755, $r = true)
@@ -77,6 +78,13 @@ class FileFactory
         return $this->makeDirIfNotExist($app_dir . '/Middleware');
     }
 
+    public function makeModelsDir()
+    {
+        $app_dir = $this->getAppDirPath();
+
+        return $this->makeDirIfNotExist($app_dir . '/Models');
+    }
+
     public function makeViewDir()
     {
         $app_dir = $this->getAppDirPath();
@@ -93,13 +101,41 @@ class FileFactory
         return fwrite($route, $content);
     }
 
+
     public function makeDemoControllerFile()
     {
         $app_dir = $this->getAppDirPath();
-        $controller = $this->makeFileIfNotExsit($app_dir . '/Controllers/DemoController.php');
-        $content = $this->file_contents::DemoController;
-        $content = strtr($content, ['{space}' => $this->space, '{Core}' => $this->core_name, '{App}' => $this->app_name]);
+        $core_name = ucfirst(strtolower($this->core_name));
+        $namespace = $core_name . '\\' . $this->app_name . '\Controllers';
+        $this->makeControllerFile($app_dir . '/Controllers', 'Demo', $namespace, 'DemoController');
+    }
+
+    public function makeControllerFile($path, $name, $namespace, $mode = 'Controller')
+    {
+        $name = ucfirst(strtolower($name));
+
+        $controller = $this->checkDir($path)->makeFileIfNotExsit(rtrim($path) . '/' . $name . 'Controller.php');
+        if ($mode === 'DemoController') $content = $this->file_contents::DemoController;
+        elseif ($mode === 'ResourceController') $content = $this->file_contents::ResourceController;
+        else $content = $this->file_contents::Controller;
+        $content = strtr($content, ['{namespace}' => $namespace, '{name}' => $name, '{sname}' => strtolower($name)]);
         return fwrite($controller, $content);
+    }
+
+    public function makeModelFile($path, $name, $namespace)
+    {
+        $name = ucfirst($name);
+        $model = $this->checkDir($path)->makeFileIfNotExsit(rtrim($path) . '/' . $name . '.php');
+        $content = $this->file_contents::Model;
+        $content = strtr($content, ['{namespace}' => $namespace, '{name}' => $name, '{sname}' => strtolower($name)]);
+        return fwrite($model, $content);
+    }
+
+
+    public function checkDir($dir)
+    {
+        is_dir($dir) || die('目录：【' . $dir . '】 不存在！' . PHP_EOL);
+        return $this;
     }
 
     public function makeDemoViewFile()
@@ -114,7 +150,6 @@ class FileFactory
     protected function makeFileIfNotExsit($name)
     {
 //        $mode = file_exists($name) ? 'a' : 'w';
-
         return $file = fopen($name, $mode = 'w');
     }
 
@@ -140,7 +175,7 @@ class FileFactory
         if ($str != $res) file_put_contents($view_path, $res);
     }
 
-    public function buildeApp()
+    public function buildApp()
     {
         switch ($this->count) {
             case 0:
@@ -164,13 +199,17 @@ class FileFactory
                 return ++$this->count;
                 break;
             case 5:
-                $this->makeRouteFile();
+                $this->makeModelsDir();
                 return ++$this->count;
                 break;
             case 6:
+                $this->makeRouteFile();
+                return ++$this->count;
+                break;
+            case 7:
                 $this->updateComposer();
                 return ++$this->count;
-            case 7:
+            case 8:
                 $this->updateViewFile();
                 return $this->count = -1;
                 break;
