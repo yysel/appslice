@@ -181,38 +181,30 @@ class FileFactory
             case 0:
                 $this->makeControllerDir();
                 return ++$this->count;
-                break;
             case 1:
                 $this->makeDemoControllerFile();
                 return ++$this->count;
-                break;
             case 2:
                 $this->makeViewDir();
                 return ++$this->count;
-                break;
             case 3:
                 $this->makeDemoViewFile();
                 return ++$this->count;
-                break;
             case 4:
                 $this->makeMiddlewareDir();
                 return ++$this->count;
-                break;
             case 5:
                 $this->makeModelsDir();
                 return ++$this->count;
-                break;
             case 6:
                 $this->makeRouteFile();
                 return ++$this->count;
-                break;
             case 7:
                 $this->updateComposer();
                 return ++$this->count;
             case 8:
                 $this->updateViewFile();
                 return $this->count = -1;
-                break;
         }
     }
 

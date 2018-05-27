@@ -145,7 +145,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class {name} extends Model
 {
-    protected \$table = '{name}s';
+    protected \$table = '{sname}s';
     
     //
 }
